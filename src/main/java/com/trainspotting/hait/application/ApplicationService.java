@@ -1,12 +1,15 @@
 package com.trainspotting.hait.application;
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.trainspotting.hait.mail.SendMail;
+import com.trainspotting.hait.mail.MailUtil;
 import com.trainspotting.hait.model.ApplicationEntity;
 import com.trainspotting.hait.model.OwnerEntity;
 
@@ -20,9 +23,9 @@ public class ApplicationService {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private SendMail mail;
+	private MailUtil mail;
 	
-	public int update(ApplicationEntity p) {
+	public int update(ApplicationEntity p) throws UnsupportedEncodingException, MessagingException {
 		//TODO 받아온 값 확인!!
 		
 		if(p.getProcess_status() == -1) {
