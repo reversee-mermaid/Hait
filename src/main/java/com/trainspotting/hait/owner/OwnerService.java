@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.trainspotting.hait.Utils.FileUtils;
 import com.trainspotting.hait.Utils.SendUtils;
+import com.trainspotting.hait.Utils.SMSUtil;
 import com.trainspotting.hait.exception.LoginFailedException;
 import com.trainspotting.hait.jwt.JwtProvider;
 import com.trainspotting.hait.model.OwnerDTO;
@@ -28,6 +29,7 @@ public class OwnerService {
 	@Autowired
 	private SendUtils smsUtil;
 
+	private SMSUtil smsUtil;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -98,18 +100,23 @@ public class OwnerService {
 		switch (p.getProcess_status()) {
 		case -3:
 			smsUtil.sendSms(soldOut);
+			smsUtil.send(null, soldOut);
 			break;
 		case -2:
 			smsUtil.sendSms(rstSitu);
+			smsUtil.send(null, rstSitu);
 			break;
 		case -1:
 			smsUtil.sendSms(cstomSitu);
+			smsUtil.send(null, cstomSitu);
 			break;
 		case 0:
 			smsUtil.sendSms(successReserv);
+			smsUtil.send(null, successReserv);
 			break;
 		case 1:
 			smsUtil.sendSms(call);
+			smsUtil.send(null, call);
 			break;
 		}
 		return mapper.updResStatus(p);

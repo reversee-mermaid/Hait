@@ -9,20 +9,24 @@ import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 @Component
-public class SendUtils {
+public class SMSUtil {
 
-	  public void sendSms(String test) {
-	    String api_key = "api key";
-	    String api_secret = "api secret";
-	    Message coolsms = new Message(api_key, api_secret);
+	private final String KEY = "api key";
+	private final String SECRET = "api secret";
+	private final String TYPE = "SMS";
+	private final String VERSION = "test app 1.2";
+	private final String FROM = "01000000000";
 
-	    // 4 params(to, from, type, text) are mandatory. must be filled
+	// TO: contact from t_reserv
+	public void send(String to, String text) {
+	    Message coolsms = new Message(KEY, SECRET);
+
 	    HashMap<String, String> params = new HashMap<String, String>();
-	    params.put("to", "0100000000");	
-	    params.put("from", "0100000000");	
-	    params.put("type", "SMS");
-	    params.put("text", test);
-	    params.put("app_version", "test app 1.2"); // application name and version
+	    params.put("from", FROM);
+	    params.put("type", TYPE);
+	    params.put("app_version", VERSION); // application name and version
+	    params.put("to", to);	
+	    params.put("text", text);
 
 	    try {
 	      JSONObject obj = (JSONObject) coolsms.send(params);
@@ -32,5 +36,5 @@ public class SendUtils {
 	      System.out.println(e.getCode());
 	    }
 	  }
-	
+
 }
