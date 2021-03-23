@@ -1,4 +1,4 @@
-package com.trainspotting.hait.Utils;
+package com.trainspotting.hait.util;
 
 import java.util.HashMap;
 

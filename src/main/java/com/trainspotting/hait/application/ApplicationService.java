@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.trainspotting.hait.mail.MailUtil;
 import com.trainspotting.hait.model.ApplicationEntity;
 import com.trainspotting.hait.model.OwnerEntity;
+import com.trainspotting.hait.util.MailUtil;
 
 @Service
 public class ApplicationService {

@@ -1,4 +1,4 @@
-package com.trainspotting.hait.Utils;
+package com.trainspotting.hait.util;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Component
-public class FileUtils {
+public class FileUtil {
 	
 	@Autowired
 	private HttpSession session;

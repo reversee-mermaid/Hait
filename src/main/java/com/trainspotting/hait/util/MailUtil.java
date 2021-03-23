@@ -1,4 +1,4 @@
-package com.trainspotting.hait.mail;
+package com.trainspotting.hait.util;
 
 import java.io.UnsupportedEncodingException;
 
@@ -16,6 +16,7 @@ public class MailUtil {
     
 	@Autowired
     private JavaMailSender mailSender;
+	
     private MimeMessage message;
     private MimeMessageHelper messageHelper;
     

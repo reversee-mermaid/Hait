@@ -9,8 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import io.jsonwebtoken.Claims;
 
-import com.trainspotting.hait.Utils.FileUtils;
-import com.trainspotting.hait.Utils.SMSUtil;
 import com.trainspotting.hait.exception.LoginFailedException;
 import com.trainspotting.hait.jwt.JwtProvider;
 import com.trainspotting.hait.model.OwnerDTO;
@@ -18,6 +16,8 @@ import com.trainspotting.hait.model.OwnerEntity;
 import com.trainspotting.hait.model.ReservEntity;
 import com.trainspotting.hait.model.RstrntDTO;
 import com.trainspotting.hait.model.RstrntEntity;
+import com.trainspotting.hait.util.FileUtil;
+import com.trainspotting.hait.util.SMSUtil;
 
 @Service
 public class OwnerService {
@@ -35,7 +35,7 @@ public class OwnerService {
 	private JwtProvider jwtProvider;
 	
 	@Autowired
-	private FileUtils fUtils;
+	private FileUtil fileUtil;
 
 	public String login(OwnerEntity p) {
 		OwnerDTO user = mapper.findUserByEmail(p.getEmail());
@@ -121,6 +121,6 @@ public class OwnerService {
 	}
 
 	private String getFilenameAfterSave(MultipartFile file, int pk) throws Exception {
-		return fUtils.save(file, pk);
+		return fileUtil.save(file, pk);
 	}
 }
