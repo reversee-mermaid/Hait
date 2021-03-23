@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import io.jsonwebtoken.Claims;
 
 import com.trainspotting.hait.Utils.FileUtils;
-import com.trainspotting.hait.Utils.SendUtils;
 import com.trainspotting.hait.Utils.SMSUtil;
 import com.trainspotting.hait.exception.LoginFailedException;
 import com.trainspotting.hait.jwt.JwtProvider;
@@ -27,10 +26,8 @@ public class OwnerService {
 	private OwnerMapper mapper;
 
 	@Autowired
-	private SendUtils smsUtil;
-
 	private SMSUtil smsUtil;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -96,27 +93,23 @@ public class OwnerService {
 		String successReserv = "예약에 성공하셨습니다.";// 0
 		String call = "고객님 자리가 준비되었습니다.식당으로 와주세요";// 1
 
+		String to = null;
 		
 		switch (p.getProcess_status()) {
 		case -3:
-			smsUtil.sendSms(soldOut);
-			smsUtil.send(null, soldOut);
+			smsUtil.send(to, soldOut);
 			break;
 		case -2:
-			smsUtil.sendSms(rstSitu);
-			smsUtil.send(null, rstSitu);
+			smsUtil.send(to, rstSitu);
 			break;
 		case -1:
-			smsUtil.sendSms(cstomSitu);
-			smsUtil.send(null, cstomSitu);
+			smsUtil.send(to, cstomSitu);
 			break;
 		case 0:
-			smsUtil.sendSms(successReserv);
-			smsUtil.send(null, successReserv);
+			smsUtil.send(to, successReserv);
 			break;
 		case 1:
-			smsUtil.sendSms(call);
-			smsUtil.send(null, call);
+			smsUtil.send(to, call);
 			break;
 		}
 		return mapper.updResStatus(p);

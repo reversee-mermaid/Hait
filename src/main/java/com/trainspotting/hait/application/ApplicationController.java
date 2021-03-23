@@ -1,5 +1,9 @@
 package com.trainspotting.hait.application;
 
+import java.io.UnsupportedEncodingException;
+
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +20,7 @@ public class ApplicationController {
 	private ApplicationService service;
 	
 	@PutMapping
-	public int update(@RequestBody ApplicationEntity p) {
+	public int update(@RequestBody ApplicationEntity p) throws UnsupportedEncodingException, MessagingException {
 //		System.out.println(p.getOwner_email());
 //		System.out.println(p.getProcess_status());
 		return service.update(p);
