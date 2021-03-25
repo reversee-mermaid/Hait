@@ -33,4 +33,12 @@ public class GlobalExceptionHandler {
 				HttpStatus.FORBIDDEN
 				);
 	}
+
+	@ExceptionHandler(ReservDuplicatedException.class)
+	protected ResponseEntity<ResponseBody> handler(ReservDuplicatedException e) {
+		return new ResponseEntity<>(
+				new ResponseBody(400, e.getMessage(), null),
+				HttpStatus.BAD_REQUEST
+				);
+	}
 }

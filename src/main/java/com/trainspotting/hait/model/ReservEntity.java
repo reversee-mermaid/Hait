@@ -4,9 +4,9 @@ public class ReservEntity {
 	private int pk;
 	private int seq;
 	private int rstrnt_pk;
-	private int customer_pk;
 	private int headcount;
 	private int process_status;
+	private String contact;
 	private String regdate;
 	
 	public int getPk() {
@@ -27,11 +27,11 @@ public class ReservEntity {
 	public void setRstrnt_pk(int rstrnt_pk) {
 		this.rstrnt_pk = rstrnt_pk;
 	}
-	public int getCustomer_pk() {
-		return customer_pk;
+	public String getContact() {
+		return contact;
 	}
-	public void setCustomer_pk(int customer_pk) {
-		this.customer_pk = customer_pk;
+	public void setContact(String contact) {
+		this.contact = contact;
 	}
 	public int getHeadcount() {
 		return headcount;

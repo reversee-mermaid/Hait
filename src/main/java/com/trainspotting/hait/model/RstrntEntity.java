@@ -3,13 +3,13 @@ package com.trainspotting.hait.model;
 public class RstrntEntity {
 	private int pk;
 	private int owner_pk;
+	private int city_pk;
+	private int state;
 	private String nm;
 	private String contact;
 	private String location;
-	private int city_pk;
 	private String more_info;
 	private String profile_img;
-	private int state;
 	private String regdate;
 
 	public int getPk() {

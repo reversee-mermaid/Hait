@@ -1,63 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.trainspotting.hait.customer.CustomerMapper">
-	
-	<insert id="insCustomer" useGeneratedKeys="true" keyProperty="pk">
-		INSERT INTO t_customer
-		(contact)
-		values
-		(#{contact})
-	</insert>
-		
-	<insert id="insReserv">
-		INSERT INTO t_reserv
-		(seq, rstrnt_pk, customer_pk, headcount)
-		SELECT IFNULL(MAX(seq), 0) + 1, #{rstrnt_pk}, #{customer_pk}, #{headcount} FROM t_reserv;
-	</insert>
-	
-	<select id="selCustomer" resultType="CustomerEntity">
-		SELECT pk, contact, regdate
-		FROM t_customer
-		WHERE contact = #{contact}
+	<select id="selRstrntAll" resultType="RstrntEntity">
+		SELECT pk, nm, location, contact, profile_img
+		FROM t_rstrnt
+		WHERE (state = 0 OR state = 1) AND enabled = true
+	</select>
+	<select id="selRstrnt" resultType="RstrntDTO">
+		SELECT  pk, nm, location, contact, more_info, profile_img
+		FROM t_rstrnt
+		WHERE pk = #{pk}
 	</select>
 	
-	<select id="selRstrntList" resultType="RstrntEntity">
-		SELECT nm, contact, 
-		location, city_pk, more_info, profile_img, 
-		state, regdate 
-		FROM t_rstrnt 
-		WHERE city_pk = #{city_pk} 
-		<if test=" nm != '' ">
-			AND nm like '%${nm}%'
-		</if>
-	</select>
-	
-	<select id="selDetail" resultType="RstrntDTO" parameterType="RstrntDTO">
-		SELECT A.pk, A.nm, A.contact AS r_contact,
-		A.location, A.more_info, A.profile_img,
-		B.seq
-		FROM t_rstrnt A
-		INNER JOIN t_reserv B
-		ON A.pk = B.rstrnt_pk
-		WHERE A.pk = #{r_pk} AND B.process_status = 0
-	</select>
-	
-	<select id="selResult" resultType="RstrntDTO">
-		SELECT A.pk, A.nm, A.location, A.contact AS r_contact,
-		B.seq, B.headcount, B.regdate, 
-		C.contact AS c_contact
-		FROM t_rstrnt A
-		INNER JOIN t_reserv B
-		ON A.pk = B.rstrnt_pk
-		INNER JOIN t_customer C
-		ON B.customer_pk = C.pk
-		WHERE B.customer_pk = #{c_pk} AND B.process_status = 0
-	</select>
-	
-	<select id="selCount" resultType="_int">
-		SELECT COUNT(seq)
+	<select id="countRealtimeTotal" resultType="_int">
+		SELECT count('')
 		FROM t_reserv
-		WHERE rstrnt_pk = #{pk} AND DATE(regdate) = DATE(#{regdate})
+		WHERE rstrnt_pk = #{rstrnt_pk} AND (process_status = 0 OR process_status = 1)
 	</select>
 	
+	<insert id="insReserv" useGeneratedKeys="true" keyProperty="pk">
+		INSERT INTO t_reserv
+			(seq, rstrnt_pk, contact, headcount)
+		SELECT 
+			IFNULL(MAX(seq), 0) + 1 AS seq, #{rstrnt_pk}, #{contact}, #{headcount} 
+			FROM t_reserv
+			WHERE rstrnt_pk = #{rstrnt_pk} 
+			AND (process_status = 0 OR process_status = 1);
+	</insert>
+	<select id="selReserv" resultType="ReservDTO">
+		SELECT * FROM t_reserv WHERE pk = #{pk}
+	</select>
+	<select id="findReservByContact" resultType="ReservEntity">
+		SELECT pk
+		FROM t_reserv
+		WHERE contact = #{contact}
+		AND (process_status = 0 OR process_status = 1)
+	</select>
 </mapper>
