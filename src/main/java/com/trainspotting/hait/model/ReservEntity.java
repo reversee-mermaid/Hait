@@ -8,6 +8,7 @@ public class ReservEntity {
 	private int process_status;
 	private String contact;
 	private String regdate;
+	private String last_update;
 	
 	public int getPk() {
 		return pk;
@@ -51,6 +52,10 @@ public class ReservEntity {
 	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
-
-	
+	public String getLast_update() {
+		return last_update;
+	}
+	public void setLast_update(String last_update) {
+		this.last_update = last_update;
+	}
 }

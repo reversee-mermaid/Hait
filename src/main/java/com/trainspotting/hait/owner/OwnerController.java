@@ -1,18 +1,14 @@
 package com.trainspotting.hait.owner;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -40,8 +36,16 @@ class OwnerController {
 
 	@Autowired
 	private OwnerService service;
+	
+	@GetMapping
+	public ResponseEntity<ResponseBody> owner() {
+		int r_pk = (int) session.getAttribute("r_pk");
+		return new ResponseEntity<>(
+				new ResponseBody(200, null, service.selOwnerByRstrntPk(r_pk)),
+				HttpStatus.OK
+				);
+	}
 
-	// 로그인 할때 넘겨줄 정보
 	@PostMapping("/login")
 	public ResponseEntity<ResponseBody> login(@RequestBody OwnerEntity p) {
 		addTokenCookie(service.login(p));
@@ -51,7 +55,6 @@ class OwnerController {
 				);
 	}
 
-	// 초기정보 셋팅
 	@GetMapping("/logout")
 	public ResponseEntity<ResponseBody> logout() {
 		session.removeAttribute("r_pk");
@@ -81,52 +84,51 @@ class OwnerController {
 				);
 	}
 
-	 // 고객 정보 List
-	@GetMapping("/resvInfoList")
-	public Map<String, Object> cstomInfoList() {
-		Map<String, Object> json = new HashMap<>();
-		json.put("resvInfo", service.resvInfoList());
-		return json;
+	@GetMapping("/restaurant")
+	public ResponseEntity<ResponseBody> selRstrnt() {
+		int pk = (int) session.getAttribute("r_pk");
+		return new ResponseEntity<>(
+				new ResponseBody(200, null, service.selRstrnt(pk)),
+				HttpStatus.OK
+				);
 	}
-
-	// 고개 정보 detail
-	@GetMapping("/resvInfo/{pk}")
-	public int cstomInfoDetail(ReservEntity p) {
-		System.out.println(p.getPk());
-		return service.resvDetail(p);
-	}
-
-	// 레스토랑 상태(open, close, break)
-	@PutMapping("/state")
-	public int updRstState(RstrntEntity p) {
-		return service.updRstState(p);
-
-	}
-
-	// 고객정보만 보여주기
-	@GetMapping("/dashboard-break")
-	public List<ReservEntity> dsahBreak() {
-		return service.resvInfoList();
-
-	}
-
-	// 새로고침 버튼 누를때마다 새로운 손님들 정보 받아오기(업데이트)
-	@PutMapping("/dashboard-open")
-	public Map<String, Object> open() {
-		Map<String, Object> json = new HashMap<>();
-		json.put("data", service.resvInfoList());
-		return json;
-
-	}
-
-	// ----------------open page button-----------------//
-
-	@PutMapping("/rstrntStatus") // 레스토랑 예약 상태 (-3,-2,-1,0,1,2)
-	public int rstrntStatus(RstrntEntity p) {
-		return service.updRstState(p);
-	}
-
 	
+	@PutMapping("/restaurant")
+	public ResponseEntity<ResponseBody> updRstrnt(MultipartFile file, String more_info) throws Exception {
+		int r_pk = (int) session.getAttribute("r_pk");
+		return new ResponseEntity<>(
+				new ResponseBody(200, null, service.updRstrnt(r_pk, file, more_info)),
+				HttpStatus.OK
+				);
+	}
+	
+	@PutMapping("/restaurant/state")
+	public ResponseEntity<ResponseBody> updRstrntState(@RequestBody RstrntEntity param) {
+		param.setPk((int) session.getAttribute("r_pk"));
+		service.updRstrntState(param);
+		return new ResponseEntity<>(
+				new ResponseBody(200, "STATE_UPDATE_SUCCESS", null),
+				HttpStatus.OK
+				);
+	}
+	
+	@GetMapping("/reservations")
+	public ResponseEntity<ResponseBody> selReservAll() {
+		int pk = (int) session.getAttribute("r_pk");
+		return new ResponseEntity<>(
+				new ResponseBody(200, null, service.selReservAll(pk)),
+				HttpStatus.OK
+				);
+	}
+	
+	@PutMapping("/reservations")
+	public ResponseEntity<ResponseBody> updReservStatus(@RequestBody ReservEntity param) {
+		service.updReservStatus(param);
+		return new ResponseEntity<>(
+				new ResponseBody(200, null, null),
+				HttpStatus.OK
+				);
+	}
 
 	private void addTokenCookie(String token) {
 		Cookie cookie = new Cookie("owner_token", token);

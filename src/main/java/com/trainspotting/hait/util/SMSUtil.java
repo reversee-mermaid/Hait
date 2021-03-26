@@ -14,7 +14,6 @@ public class SMSUtil {
 	private final String KEY = "api key";
 	private final String SECRET = "api secret";
 	private final String TYPE = "SMS";
-	private final String VERSION = "test app 1.2";
 	private final String FROM = "01000000000";
 
 	// TO: contact from t_reserv
@@ -24,7 +23,6 @@ public class SMSUtil {
 	    HashMap<String, String> params = new HashMap<String, String>();
 	    params.put("from", FROM);
 	    params.put("type", TYPE);
-	    params.put("app_version", VERSION); // application name and version
 	    params.put("to", to);	
 	    params.put("text", text);
 
