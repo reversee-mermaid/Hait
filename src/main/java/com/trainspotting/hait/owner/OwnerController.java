@@ -23,7 +23,6 @@ import com.trainspotting.hait.model.ReservEntity;
 import com.trainspotting.hait.model.RstrntDTO;
 import com.trainspotting.hait.model.RstrntEntity;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/owner")
 class OwnerController {
