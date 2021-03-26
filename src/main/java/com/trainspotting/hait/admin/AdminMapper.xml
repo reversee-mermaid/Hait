@@ -24,4 +24,28 @@
 		on A.city_pk = B.pk
 		where A.pk = #{pk}
 	</select>
+	
+	<update id="update">
+		update t_application
+		set process_status = #{process_status}
+		where owner_email = #{owner_email}
+	</update>
+	
+	<insert id="insOwner">
+		insert into t_owner
+		(nm, email, contact, pw)
+		select owner_nm as nm, owner_email as email, owner_contact as contact, #{pw}
+		from t_application A
+		where A.owner_email = #{email}
+	</insert>
+	
+	<insert id="insRstrnt">
+		insert into t_rstrnt
+		(owner_pk, nm, city_pk)
+		select B.pk as owner_pk, A.rstrnt_nm as nm, A.city_pk
+		from t_application A
+		inner join t_owner B
+		on A.owner_email = B.email
+		where A.owner_email = #{owner_email}
+	</insert>
 </mapper>
