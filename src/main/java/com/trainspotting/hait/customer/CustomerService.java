@@ -49,6 +49,9 @@ public class CustomerService {
 		int realtime_total = countRealtimeTotal(rstrnt_pk);
 		// TODO contact marking
 		// String contact = result.getContact();
+
+		String contact = result.getContact();
+		result.setContact(contactMarking(contact));
 		
 		result.setRstrnt(selRstrnt(rstrnt_pk));
 		result.getRstrnt().setRealtime_total(realtime_total);
@@ -62,5 +65,11 @@ public class CustomerService {
 	
 	private int countRealtimeTotal(int pk) {
 		return mapper.countRealtimeTotal(pk);
+	}
+	
+	private String contactMarking(String current) {
+		StringBuffer contact = new StringBuffer(current);
+		contact.replace(3, 7, "****");
+		return contact.toString();
 	}
 }
