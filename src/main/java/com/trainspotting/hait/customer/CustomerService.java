@@ -17,8 +17,17 @@ public class CustomerService {
 	@Autowired
 	private CustomerMapper mapper;
 
-	public List<RstrntEntity> selRstrntAll() {
-		return mapper.selRstrntAll();
+	public List<RstrntEntity> selRstrntAll(String nm, String city_pk) {
+		RstrntEntity param = new RstrntEntity();
+		
+		if(nm != null && nm.trim() != "") {
+			param.setNm(nm.trim());
+		}
+		if(city_pk != null && city_pk != "") {
+			param.setCity_pk(Integer.parseInt(city_pk));
+		}
+		
+		return mapper.selRstrntAll(param);
 	}
 
 	public RstrntDTO selRstrnt(int pk) {

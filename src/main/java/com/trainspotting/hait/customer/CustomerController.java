@@ -21,9 +21,9 @@ public class CustomerController {
 	private CustomerService service;
 	
 	@GetMapping("/restaurants")
-	public ResponseEntity<ResponseBody> selRstrntAll() {
+	public ResponseEntity<ResponseBody> selRstrntAll(String nm, String city_pk) {
 		return new ResponseEntity<>(
-				new ResponseBody(200, null, service.selRstrntAll()),
+				new ResponseBody(200, null, service.selRstrntAll(nm, city_pk)),
 				HttpStatus.OK
 				);
 	}

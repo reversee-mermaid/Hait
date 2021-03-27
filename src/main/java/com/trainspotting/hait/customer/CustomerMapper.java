@@ -11,7 +11,7 @@ import com.trainspotting.hait.model.RstrntEntity;
 
 @Mapper
 public interface CustomerMapper {
-	List<RstrntEntity> selRstrntAll();
+	List<RstrntEntity> selRstrntAll(RstrntEntity param);
 	RstrntDTO selRstrnt(int pk);
 	
 	int countRealtimeTotal(int rstrnt_pk);

@@ -4,7 +4,14 @@
 	<select id="selRstrntAll" resultType="RstrntEntity">
 		SELECT pk, nm, location, contact, profile_img
 		FROM t_rstrnt
-		WHERE (state = 0 OR state = 1) AND enabled = true
+		WHERE (state = 0 OR state = 1) 
+		AND enabled = true
+		<if test="city_pk != 0">
+			AND city_pk = #{city_pk}
+		</if>
+		<if test="nm != null">
+			AND nm LIKE CONCAT('%', #{nm}, '%')
+		</if>
 	</select>
 	<select id="selRstrnt" resultType="RstrntDTO">
 		SELECT  pk, nm, location, contact, more_info, profile_img
