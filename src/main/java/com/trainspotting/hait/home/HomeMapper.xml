@@ -3,9 +3,6 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.trainspotting.hait.home.HomeMapper">
-	<select id="select" resultType="CityEntity">
-		select pk, nm from t_city
-	</select>
 
 	<insert id="insert">
 		insert into t_application
