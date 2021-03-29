@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.trainspotting.hait.customer.CustomerMapper">
-	<select id="selRstrntAll" resultType="RstrntEntity">
-		SELECT pk, nm, location, contact, profile_img
-		FROM t_rstrnt
-		WHERE (state = 0 OR state = 1) 
-		AND enabled = true
-		<if test="city_pk != 0">
-			AND city_pk = #{city_pk}
-		</if>
-		<if test="nm != null">
-			AND nm LIKE CONCAT('%', #{nm}, '%')
-		</if>
+<mapper namespace="com.trainspotting.hait.reserv.ReservMapper">
+	<select id="selReservAll" resultType="ReservEntity">
+		SELECT pk, seq, headcount, contact, regdate, process_status
+		FROM t_reserv
+		WHERE rstrnt_pk = #{pk} AND (process_status = 0 OR process_status = 1)
+		ORDER BY process_status DESC, last_update DESC
 	</select>
+	
+	<update id="updReservStatus">
+		UPDATE t_reserv
+		SET process_status = #{process_status}, last_update = now()
+		WHERE pk = #{pk}
+	</update>
+	
 	<select id="selRstrnt" resultType="RstrntDTO">
 		SELECT  pk, nm, location, contact, more_info, profile_img
 		FROM t_rstrnt
@@ -34,9 +35,11 @@
 			WHERE rstrnt_pk = #{rstrnt_pk} 
 			AND (process_status = 0 OR process_status = 1);
 	</insert>
+	
 	<select id="selReserv" resultType="ReservDTO">
 		SELECT * FROM t_reserv WHERE pk = #{pk}
 	</select>
+	
 	<select id="findReservByContact" resultType="ReservEntity">
 		SELECT pk
 		FROM t_reserv

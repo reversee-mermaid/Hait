@@ -47,37 +47,4 @@ public class AdminService {
 
 		return jwtProvider.provideToken(data.getId(), "ADMIN").getToken();
 	}
-	
-	public List<ApplicationDTO> listAll() {
-		return mapper.listAll();
-	}
-	
-	public List<ApplicationDTO> listStatus(int p) {
-		return mapper.listStatus(p);
-	}
-	
-	public ApplicationDTO detail(ApplicationEntity p) {
-		return mapper.detail(p);
-	}
-	
-	public int update(ApplicationEntity p) throws UnsupportedEncodingException, MessagingException {
-		if(p.getProcess_status() == -1) {
-			mail.rejectMail(p.getOwner_email());
-			
-		} else if (p.getProcess_status() == 1) {
-			String tempPW = UUID.randomUUID().toString().replaceAll("-", "");
-			tempPW = tempPW.substring(0, 10);
-			
-			OwnerEntity oe = new OwnerEntity();
-			oe.setEmail(p.getOwner_email());
-			oe.setPw(passwordEncoder.encode(tempPW));
-			mapper.insOwner(oe);
-			mapper.insRstrnt(p);
-			
-			mail.acceptMail(p.getOwner_email(), tempPW);
-		}
-		
-		return mapper.update(p);
-	}
-
 }

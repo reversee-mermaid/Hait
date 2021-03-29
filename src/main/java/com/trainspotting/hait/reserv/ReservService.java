@@ -1,4 +1,4 @@
-package com.trainspotting.hait.customer;
+package com.trainspotting.hait.reserv;
 
 import java.util.List;
 
@@ -9,27 +9,49 @@ import com.trainspotting.hait.exception.ReservDuplicatedException;
 import com.trainspotting.hait.model.ReservDTO;
 import com.trainspotting.hait.model.ReservEntity;
 import com.trainspotting.hait.model.RstrntDTO;
-import com.trainspotting.hait.model.RstrntEntity;
+import com.trainspotting.hait.util.SMSUtil;
 
 @Service
-public class CustomerService {
+public class ReservService {
 	
 	@Autowired
-	private CustomerMapper mapper;
-
-	public List<RstrntEntity> selRstrntAll(String nm, String city_pk) {
-		RstrntEntity param = new RstrntEntity();
-		
-		if(nm != null && nm.trim() != "") {
-			param.setNm(nm.trim());
-		}
-		if(city_pk != null && city_pk != "") {
-			param.setCity_pk(Integer.parseInt(city_pk));
-		}
-		
-		return mapper.selRstrntAll(param);
+	private ReservMapper mapper;
+	
+	@Autowired
+	private SMSUtil smsUtil;
+	
+	//owner
+	public List<ReservEntity> selReservAll(int pk) {
+		return mapper.selReservAll(pk);
 	}
 
+	public void updReservStatus(ReservEntity param) {
+		String message = null;
+		switch (param.getProcess_status()) {
+		case 2:
+			message = "착석 확인 되었습니다. 맛있는 식사 하세요!";
+			break;
+		case 1:
+			message = "고객님, 자리가 준비 되었습니다. 매장으로 방문해주세요.";
+			break;
+		case -1:
+			message = "고객님의 사정으로 인해 예약이 취소 되었습니다.";
+			break;
+		case -2:
+			message = "가게의 사정으로 인해 예약이 취소 되었습니다.";
+			break;
+		case -3:
+			message = "재료 소진으로 인해 예약이 취소 되었습니다.";
+			break;
+		default:
+			break;
+		}
+
+		smsUtil.send(param.getContact(), message);
+		mapper.updReservStatus(param);
+	}
+	
+	//customer
 	public RstrntDTO selRstrnt(int pk) {
 		RstrntDTO data = mapper.selRstrnt(pk);
 		
@@ -56,9 +78,7 @@ public class CustomerService {
 		
 		int rstrnt_pk = result.getRstrnt_pk();
 		int realtime_total = countRealtimeTotal(rstrnt_pk);
-		// TODO contact marking
-		// String contact = result.getContact();
-
+		
 		String contact = result.getContact();
 		result.setContact(contactMarking(contact));
 		

@@ -41,4 +41,12 @@ public class GlobalExceptionHandler {
 				HttpStatus.BAD_REQUEST
 				);
 	}
+	
+	@ExceptionHandler(ApplyDuplicatedException.class)
+	protected ResponseEntity<ResponseBody> handler(ApplyDuplicatedException e) {
+		return new ResponseEntity<>(
+				new ResponseBody(400, e.getMessage(), null),
+				HttpStatus.BAD_REQUEST
+				);
+	}
 }

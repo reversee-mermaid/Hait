@@ -27,9 +27,9 @@ CREATE TABLE t_city (
 CREATE TABLE t_application (
 	pk int unsigned auto_increment primary key,
 	owner_nm varchar(50) not null,
-	owner_email varchar(100) not null unique,
-	owner_contact varchar(20) not null unique,
-	rstrnt_nm varchar(50) not null unique,
+	owner_email varchar(100) not null,
+	owner_contact varchar(20) not null,
+	rstrnt_nm varchar(50) not null,
 	city_pk int unsigned not null,
 	more_info varchar(2000),
 	process_status int default 0,

@@ -2,7 +2,34 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.trainspotting.hait.admin.AdminMapper">
+<mapper namespace="com.trainspotting.hait.application.ApplicationMapper">
+	<select id="findOwnerEmail" resultType="ApplicationEntity">
+		select * from t_application 
+		where owner_email = #{owner_email}
+		and process_status > -1
+	</select>
+	
+	<select id="findOwnerContact" resultType="ApplicationEntity">
+		select * from t_application 
+		where owner_contact = #{owner_contact}
+		and process_status > -1
+	</select>
+	
+	<select id="findRstrntName" resultType="ApplicationEntity">
+		select * from t_application 
+		where rstrnt_nm = #{rstrnt_nm}
+		and process_status > -1
+	</select>
+	
+	<insert id="insert">
+		insert into t_application
+		(owner_nm, owner_email, owner_contact
+		, rstrnt_nm, city_pk, more_info)
+		values
+		(#{owner_nm}, #{owner_email}, #{owner_contact}
+		, #{rstrnt_nm}, #{city_pk}, #{more_info})
+	</insert>
+
 	<select id="listAll" resultType="ApplicationDTO">
 		select A.*, B.nm as city_nm from t_application A
 		inner join t_city B

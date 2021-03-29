@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainspotting.hait.rstrnt.RstrntMapper">	
+	<select id="selRstrnt" resultType="RstrntEntity">
+		SELECT * FROM t_rstrnt
+		WHERE pk = #{pk}
+	</select>
+	
+	<update id="resetPw">
+		UPDATE t_owner
+		SET pw = #{reset_pw}
+		WHERE pk = #{owner_pk}
+	</update>
+	
+	<update id="updRstrnt" parameterType="RstrntDTO">
+		UPDATE t_rstrnt
+		<trim prefix="SET" suffixOverrides=",">
+			enabled = true,
+			<if test="contact != null">contact = #{contact},</if>
+			<if test="location != null">location = #{location},</if>
+			<if test="more_info != null">more_info = #{more_info},</if>
+			<if test="profile_img != null">profile_img = #{profile_img},</if>
+		</trim>
+		WHERE pk = #{pk}
+	</update>
+	
+	<update id="updRstrntState">
+		UPDATE t_rstrnt
+		SET state = #{state}
+		WHERE pk = #{pk}
+	</update>
+	
+	<select id="selReservAll" resultType="ReservEntity">
+		SELECT pk, seq, headcount, contact, regdate, process_status
+		FROM t_reserv
+		WHERE rstrnt_pk = #{pk} AND (process_status = 0 OR process_status = 1)
+		ORDER BY process_status DESC, last_update DESC
+	</select>
+	
+	<update id="updReservStatus">
+		UPDATE t_reserv
+		SET process_status = #{process_status}, last_update = now()
+		WHERE pk = #{pk}
+	</update>
+	
+	<select id="selRstrntAll" resultType="RstrntEntity">
+		SELECT pk, nm, location, contact, profile_img
+		FROM t_rstrnt
+		WHERE (state = 0 OR state = 1) 
+		AND enabled = true
+		<if test="city_pk != 0">
+			AND city_pk = #{city_pk}
+		</if>
+		<if test="nm != null">
+			AND nm LIKE CONCAT('%', #{nm}, '%')
+		</if>
+	</select>
+	
+	<select id="countRealtimeTotal" resultType="_int">
+		SELECT count('')
+		FROM t_reserv
+		WHERE rstrnt_pk = #{rstrnt_pk} AND (process_status = 0 OR process_status = 1)
+	</select>
+</mapper>
