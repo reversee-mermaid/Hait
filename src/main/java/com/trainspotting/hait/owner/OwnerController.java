@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.trainspotting.hait.ResponseBody;
 import com.trainspotting.hait.model.OwnerEntity;
+import com.trainspotting.hait.rstrnt.RstrntService;
 
 @RestController
 @RequestMapping("/api/owner")
@@ -27,20 +28,23 @@ class OwnerController {
 	private HttpSession session;
 
 	@Autowired
-	private OwnerService service;
+	private OwnerService ownService;
+	
+	@Autowired
+	private RstrntService rstService;
 	
 	@GetMapping
 	public ResponseEntity<ResponseBody> owner() {
 		int r_pk = (int) session.getAttribute("r_pk");
 		return new ResponseEntity<>(
-				new ResponseBody(200, null, service.selOwnerByRstrntPk(r_pk)),
+				new ResponseBody(200, null, ownService.selOwnerByRstrntPk(r_pk)),
 				HttpStatus.OK
 				);
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<ResponseBody> login(@RequestBody OwnerEntity p) {
-		addTokenCookie(service.login(p));
+		addTokenCookie(ownService.login(p));
 		return new ResponseEntity<>(
 				new ResponseBody(200, "LOGIN_SUCCESS", null),
 				HttpStatus.OK
@@ -49,12 +53,19 @@ class OwnerController {
 
 	@GetMapping("/logout")
 	public ResponseEntity<ResponseBody> logout() {
-		session.removeAttribute("r_pk");
-		addTokenCookie(null);
-		return new ResponseEntity<>(
-				new ResponseBody(200, "LOGOUT_SUCCESS", null),
-				HttpStatus.OK
-				);
+		int r_pk = (int) session.getAttribute("r_pk");
+		
+		ResponseBody body = new ResponseBody(400, "LOGOUT_FAILED", null);
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		
+		if(rstService.selReservAll(r_pk).isEmpty()) {
+			session.invalidate();
+			addTokenCookie(null);
+			
+			body = new ResponseBody(200, "LOGIN_SUCCESS", null);
+			status = HttpStatus.OK;
+		}
+		return new ResponseEntity<>(body, status);
 	}
 
 	private void addTokenCookie(String token) {
