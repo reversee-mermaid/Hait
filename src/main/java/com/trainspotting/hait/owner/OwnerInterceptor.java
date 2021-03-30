@@ -35,7 +35,6 @@ public class OwnerInterceptor extends HandlerInterceptorAdapter {
 		
 		HttpSession session = request.getSession();
 		if(session.getAttribute("r_pk") == null) {
-			System.out.println("r_pk in token");
 			session.setAttribute("r_pk", claims.get("r_pk"));
 		}
 		
