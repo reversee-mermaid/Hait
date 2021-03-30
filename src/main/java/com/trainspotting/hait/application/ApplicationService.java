@@ -29,23 +29,20 @@ public class ApplicationService {
 	private MailUtil mail;
 
 	public int insert(ApplicationEntity p) {
+		p.setRstrnt_nm(p.getRstrnt_nm().trim());
+		if(mapper.findRstrntName(p) != null) throw new ApplyDuplicatedException("RESTAURANT_NAME_DUPLICATED");
 		if(mapper.findOwnerEmail(p) != null) throw new ApplyDuplicatedException("OWNER_EMAIL_DUPLICATED");
 		if(mapper.findOwnerContact(p) != null) throw new ApplyDuplicatedException("OWNER_CONTACT_DUPLICATED");
-		if(mapper.findRstrntName(p) != null) throw new ApplyDuplicatedException("RESTAURANT_NAME_DUPLICATED");
 
 		return mapper.insert(p);
 	}
 	
-	public List<ApplicationDTO> listAll() {
-		return mapper.listAll();
+	public List<ApplicationDTO> listAll(int process_status) {
+		return mapper.listAll(process_status);
 	}
 	
-	public List<ApplicationDTO> listStatus(int p) {
-		return mapper.listStatus(p);
-	}
-	
-	public ApplicationDTO detail(ApplicationEntity p) {
-		return mapper.detail(p);
+	public ApplicationDTO detail(int pk) {
+		return mapper.detail(pk);
 	}
 	
 	public int update(ApplicationEntity p) throws UnsupportedEncodingException, MessagingException {
@@ -57,8 +54,11 @@ public class ApplicationService {
 			tempPW = tempPW.substring(0, 10);
 			
 			OwnerEntity oe = new OwnerEntity();
+			oe.setNm(p.getOwner_nm());
 			oe.setEmail(p.getOwner_email());
+			oe.setContact(p.getOwner_contact());
 			oe.setPw(passwordEncoder.encode(tempPW));
+			
 			mapper.insOwner(oe);
 			mapper.insRstrnt(p);
 			
@@ -67,5 +67,4 @@ public class ApplicationService {
 		
 		return mapper.update(p);
 	}
-
 }

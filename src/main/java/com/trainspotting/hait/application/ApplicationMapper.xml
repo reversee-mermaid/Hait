@@ -34,13 +34,6 @@
 		select A.*, B.nm as city_nm from t_application A
 		inner join t_city B
 		on A.city_pk = B.pk
-		order by pk desc
-	</select>
-	
-	<select id="listStatus" resultType="ApplicationDTO">
-		select A.*, B.nm as city_nm from t_application A
-		inner join t_city B
-		on A.city_pk = B.pk
 		where process_status = #{process_status}
 		order by pk desc
 	</select>
@@ -61,9 +54,7 @@
 	<insert id="insOwner">
 		insert into t_owner
 		(nm, email, contact, pw)
-		select owner_nm as nm, owner_email as email, owner_contact as contact, #{pw}
-		from t_application A
-		where A.owner_email = #{email}
+		values (#{nm}, #{email}, #{contact}, #{pw})
 	</insert>
 	
 	<insert id="insRstrnt">

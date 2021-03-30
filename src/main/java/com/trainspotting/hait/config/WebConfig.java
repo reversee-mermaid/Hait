@@ -36,9 +36,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry
 			.addInterceptor(new AdminInterceptor(jwtProvider))
-				.excludePathPatterns("/api/admin/login")
-				.excludePathPatterns("/api/admin/logout")
-				.addPathPatterns("/api/admin/**");
+				.addPathPatterns("/api/applications/**");
 		registry
 			.addInterceptor(new OwnerInterceptor(jwtProvider))
 				.excludePathPatterns("/api/owner/login")
