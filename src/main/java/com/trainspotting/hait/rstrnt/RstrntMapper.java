@@ -11,7 +11,7 @@ import com.trainspotting.hait.model.RstrntEntity;
 @Mapper
 public interface RstrntMapper {
 	//owner
-	RstrntEntity selRstrnt(int pk);
+	RstrntDTO selRstrnt(int pk);
 	int resetPw(RstrntDTO dto);
 	int updRstrnt(RstrntEntity p);
 	void updRstrntState(RstrntEntity p);
