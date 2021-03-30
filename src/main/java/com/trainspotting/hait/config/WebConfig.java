@@ -39,9 +39,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 				.addPathPatterns("/api/applications/**");
 		registry
 			.addInterceptor(new OwnerInterceptor(jwtProvider))
-				.excludePathPatterns("/api/owner/login")
-				.excludePathPatterns("/api/owner/logout")
-				.addPathPatterns("/api/owner/**");
+				.addPathPatterns("/api/restaurant/**")
+				.addPathPatterns("/api/reservations/**");
 	}
 	
 	@Override

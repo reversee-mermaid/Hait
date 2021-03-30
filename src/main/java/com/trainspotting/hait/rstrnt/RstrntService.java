@@ -57,7 +57,7 @@ public class RstrntService {
 		return jwtProvider.provideToken(email, "OWNER", r_pk).getToken();
 	}
 
-	public RstrntEntity selRstrnt(int pk) {
+	public RstrntDTO selRstrnt(int pk) {
 		return mapper.selRstrnt(pk);
 	}
 
